@@ -30,11 +30,11 @@ const Header = styled.div`
   box-shadow: 0 3px 6px 0 #555;
 `;
 
-const MovieImage = styled.img`
-  width: 55px;
-  height: 48px;
-  margin: 15px;
-`;
+// const MovieImage = styled.img`
+//   width: 55px;
+//   height: 48px;
+//   margin: 15px;
+// `;
 
 const RegisterButton = styled.button`
   background-color: orangered;
@@ -129,7 +129,6 @@ const Home = () => {
     <Container>
       <Header>
         <AppName>
-          <MovieImage src="logo12.jpg" />
           Marvo Movies
         </AppName>
         <LoginButton>

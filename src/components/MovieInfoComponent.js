@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Axios from "axios";
-import { API_KEY } from "../App";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -21,8 +19,8 @@ const InfoColumn = styled.div`
 `;
 const MovieName = styled.span`
   font-size: 22px;
-  font-weight: 600;
-  color: black;
+  font-weight: 400;
+
   margin: 15px 0;
   white-space: nowrap;
   overflow: hidden;
@@ -60,56 +58,51 @@ const MovieInfoComponent = (props) => {
   const [movieInfo, setMovieInfo] = useState();
   const { selectedMovie } = props;
 
-  useEffect(() => {
-    const backendUrl="http://localhost:6060/api/v1/movies:id"
-    Axios.get(
-      backendUrl.replace(":id", selectedMovie),
-    ).then((response) => setMovieInfo(response.data));
+  const getSingleMovie = async() => {
+    try {
+      const backendUrl="http://localhost:6060/movies/:id"
+      const response = await fetch(backendUrl.replace(":id", selectedMovie));
+      if (response.ok) {
+        const data = await response.json();
+        setMovieInfo(data);
+      } else {
+        console.error('Error getting movie data:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error searching movie data:', error);
+    }
+  };
+// eslint-disable-next-line
+  useEffect(async() => {
+      await getSingleMovie()
+      // eslint-disable-next-line
   }, [selectedMovie]);
+
+
+
   return (
     <Container>
       {movieInfo ? (
         <>
-          <CoverImage src={movieInfo?.Poster} alt={movieInfo?.Title} />
+          <CoverImage src={movieInfo?.imageUrl} alt={movieInfo?.title} />
           <InfoColumn>
             <MovieName>
-              {movieInfo?.Type}: <span>{movieInfo?.Title}</span>
+              {movieInfo?.genre}: <span>{movieInfo?.title}</span>
             </MovieName>
             <MovieInfo>
-              IMDB Rating: <span>{movieInfo?.imdbRating}</span>
+              IMDB Rating: <span>{movieInfo?.rating}</span>
             </MovieInfo>
             <MovieInfo>
-              Year: <span>{movieInfo?.Year}</span>
+              Released: <span>{movieInfo?.year}</span>
             </MovieInfo>
             <MovieInfo>
-              Language: <span>{movieInfo?.Language}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Rated: <span>{movieInfo?.Rated}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Released: <span>{movieInfo?.Released}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Runtime: <span>{movieInfo?.Runtime}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Genre: <span>{movieInfo?.Genre}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Director: <span>{movieInfo?.Director}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Actors: <span>{movieInfo?.Actors}</span>
-            </MovieInfo>
-            <MovieInfo>
-              Plot: <span>{movieInfo?.Plot}</span>
+              Genre: <span>{movieInfo?.genre}</span>
             </MovieInfo>
           </InfoColumn>
           <Close onClick={() => props.onMovieSelect()}>X</Close>
         </>
       ) : (
-        'Loading...'
+        "Loading..."
       )}
     </Container>
   );

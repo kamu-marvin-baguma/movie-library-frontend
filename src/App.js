@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/Home'
 import Dashboard from './pages/DashBoard'
 
-export const API_KEY = "a9118a3a";
+
 
 function App() {
   return (
